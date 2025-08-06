@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>My Link in Bio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,21 +12,58 @@
   <link rel="stylesheet" href="style.css">
   <script>
     function openInstagramLink(username) {
-      // Try to open Instagram app first
       const instagramAppUrl = `instagram://user?username=${username}`;
       const instagramWebUrl = `https://www.instagram.com/${username}/`;
       
-      // Create a temporary link element
-      const link = document.createElement('a');
-      link.href = instagramAppUrl;
+      // Method 1: Try direct app opening
+      try {
+        window.location.href = instagramAppUrl;
+      } catch (e) {
+        console.log('Direct app opening failed');
+      }
       
-      // Try to open the app
-      const opened = link.click();
+      // Method 2: Use iframe to trigger app (more reliable)
+      setTimeout(() => {
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = instagramAppUrl;
+        document.body.appendChild(iframe);
+        
+        // Remove iframe after a short delay
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+        }, 1000);
+      }, 100);
       
-      // Fallback to web version after a short delay
+      // Method 3: Fallback to web version
       setTimeout(() => {
         window.location.href = instagramWebUrl;
-      }, 1000);
+      }, 1500);
+    }
+    
+    // Alternative approach for better app detection
+    function forceInstagramApp(username) {
+      const appUrl = `instagram://user?username=${username}`;
+      const webUrl = `https://www.instagram.com/${username}/`;
+      
+      // Create a hidden link and click it
+      const link = document.createElement('a');
+      link.href = appUrl;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Check if we're still on the same page after a delay
+      setTimeout(() => {
+        if (document.hidden || document.webkitHidden) {
+          // App was opened successfully
+          return;
+        } else {
+          // App didn't open, go to web version
+          window.location.href = webUrl;
+        }
+      }, 2000);
     }
   </script>
 </head>
@@ -40,7 +79,7 @@
     </div>
     <!-- Cards Section -->
     <div class="cards-section">
-      <a href="instagram://user?username=hojixkbar" class="card-link" onclick="openInstagramLink('hojixkbar')">
+      <a href="instagram://user?username=hojixkbar" class="card-link" onclick="forceInstagramApp('hojixkbar'); return false;">
         <div class="card">
           <div class="card-img">
             <img src="assets/ig.png" alt="Instagram">
@@ -62,7 +101,7 @@
           </div>
         </div>
       </a>
-      <a href="instagram://user?username=911lyrics" class="card-link" onclick="openInstagramLink('911lyrics')">
+      <a href="instagram://user?username=911lyrics" class="card-link" onclick="forceInstagramApp('911lyrics'); return false;">
         <div class="card">
           <div class="card-img">
             <img src="assets/ig.png" alt="Instagram">
