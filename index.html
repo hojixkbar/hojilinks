@@ -8,6 +8,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    function openInstagramLink(username) {
+      // Try to open Instagram app first
+      const instagramAppUrl = `instagram://user?username=${username}`;
+      const instagramWebUrl = `https://www.instagram.com/${username}/`;
+      
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = instagramAppUrl;
+      
+      // Try to open the app
+      const opened = link.click();
+      
+      // Fallback to web version after a short delay
+      setTimeout(() => {
+        window.location.href = instagramWebUrl;
+      }, 1000);
+    }
+  </script>
 </head>
 <body>
   <div class="container">
@@ -21,7 +40,7 @@
     </div>
     <!-- Cards Section -->
     <div class="cards-section">
-      <a href="https://www.instagram.com/hojixkbar?igsh=aTd3NThzMjhodDcy&utm_source=qr" target="_blank" class="card-link">
+      <a href="instagram://user?username=hojixkbar" class="card-link" onclick="openInstagramLink('hojixkbar')">
         <div class="card">
           <div class="card-img">
             <img src="assets/ig.png" alt="Instagram">
@@ -43,7 +62,7 @@
           </div>
         </div>
       </a>
-      <a href="https://www.instagram.com/911lyrics?igsh=ejJmMzc1ZjZtOXM3&utm_source=qr" target="_blank" class="card-link">
+      <a href="instagram://user?username=911lyrics" class="card-link" onclick="openInstagramLink('911lyrics')">
         <div class="card">
           <div class="card-img">
             <img src="assets/ig.png" alt="Instagram">
