@@ -111,6 +111,8 @@ body {
   display: block;
   width: 100%;
   transition: transform 0.05s ease;
+  border-radius: 50px;
+  overflow: hidden;
 }
 
 .card-link:active {
