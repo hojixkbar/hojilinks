@@ -23,10 +23,13 @@ body {
     padding: 20px;
   }
   
-  /* Card click effect for mobile: scale only, no shadow */
+  /* Modern card click effect for mobile */
+  .card {
+    transition: transform 0.12s cubic-bezier(.4,0,.2,1), box-shadow 0.12s cubic-bezier(.4,0,.2,1);
+  }
   .card:active {
-    transform: scale(0.95);
-    box-shadow: none !important;
+    transform: scale(0.97);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.25);
   }
 }
 
