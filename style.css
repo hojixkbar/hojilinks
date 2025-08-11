@@ -22,6 +22,12 @@ body {
     justify-content: center;
     padding: 20px;
   }
+  
+  /* Card click effect for mobile: scale only, no shadow */
+  .card:active {
+    transform: scale(0.95);
+    box-shadow: none !important;
+  }
 }
 
 /* Desktop background (computers) */
