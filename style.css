@@ -12,14 +12,112 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Language Selector */
+.language-selector {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  font-family: 'Inter', 'Poppins', Arial, sans-serif;
+}
+
+.current-flag {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: border-color 0.3s ease;
+}
+
+.current-flag:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.current-flag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.language-dropdown {
+  position: absolute;
+  top: 42px;
+  right: -10px;
+  background: rgba(17, 17, 17, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 10px 0;
+  width: 52px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.language-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.flag-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.flag-option:last-child {
+  margin-bottom: 0;
+}
+
+.flag-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.flag-option img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .language-selector {
+    top: 15px;
+    right: 15px;
+  }
+  
+  .current-flag {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .language-dropdown {
+    top: 37px;
+    width: 48px;
+    padding: 10px 0;
+    right: -10px;
+  }
+}
+
 /* Mobile background (phones) */
 @media (max-width: 768px) {
   body {
-    background: #111111 url('assets/bgsam.png') no-repeat center center;
+    background: #111111 url('assets/bgsam.png') no-repeat center center fixed;
     background-size: cover;
     height: 100vh;
     height: -webkit-fill-available;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     /* Safari safe area fixes */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -28,9 +126,9 @@ body {
   }
   
   .container {
-    height: 100vh;
-    height: -webkit-fill-available;
-    justify-content: center;
+    min-height: 100vh;
+    height: auto;
+    justify-content: flex-start;
     padding: 20px;
     padding-top: max(20px, env(safe-area-inset-top) + 10px);
     padding-bottom: max(20px, env(safe-area-inset-bottom) + 10px);
@@ -62,8 +160,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 100vh;
+  padding-top: 20px;
 }
 
 /* Desktop container */
@@ -177,6 +276,12 @@ body {
   cursor: pointer;
 }
 
+/* Ensure Support button can scale without cutting */
+.cards-section > a:first-child > .card {
+  transform-origin: center center;
+  will-change: transform;
+}
+
 /* Mobile card height - 25% less */
 @media (max-width: 768px) {
   .card {
@@ -204,18 +309,74 @@ body {
   left: 24px;
 }
 
+/* Allow Support button to scale properly - entire button scales together */
+.cards-section > a:first-child > .card {
+  overflow: visible !important;
+}
+
+.cards-section > a:first-child .card-img {
+  overflow: visible !important;
+}
+
+/* Ensure the entire Support button scales as one unit */
+.cards-section > a:first-child {
+  overflow: visible !important;
+}
+
 .card-img svg,
 .card-img img {
   width: 32px;
   height: 32px;
   stroke: #fff;
   fill: none;
+  object-fit: contain;
 }
 
-.card-img img {
-  stroke: none;
-  fill: none;
-  object-fit: contain;
+/* Make Spotify logo bigger - very specific selector */
+.cards-section .card:nth-child(5) .card-img img {
+  width: 45px !important;
+  height: 45px !important;
+}
+
+
+
+/* Modern mobile click effects for all cards */
+.card {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Pulse animation for Support button only - entire button scales together */
+@keyframes supportPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Very specific selector - only the Support button gets animation */
+.cards-section > a:first-child > .card {
+  animation: supportPulse 2s ease-in-out infinite !important;
+  transform-origin: center center;
+}
+
+/* Override pulse when clicked to show click effect */
+.cards-section > a:first-child > .card:active {
+  animation: none !important;
+  transform: scale(0.98) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Ensure click effects work on mobile */
+@media (max-width: 768px) {
+  .card:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
+  }
 }
 
 .card-content {

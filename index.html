@@ -65,9 +65,122 @@
         }
       }, 2000);
     }
+    
+    // Language translations
+    const translations = {
+      'uz': {
+        'support': 'Qo\'llab-quvvatlash',
+        'donate': 'Tirikchilik',
+        'followers': 'Obunachilar',
+        'subscribers': 'A\'zo',
+        'hobby': 'Qiziqish',
+        'playlist': 'Pleylist'
+      },
+      'us': {
+        'support': 'Support',
+        'donate': 'Donate',
+        'followers': 'followers',
+        'subscribers': 'subscribers',
+        'hobby': 'Hobby',
+        'playlist': 'Playlist'
+      },
+      'ru': {
+        'support': 'Поддержка',
+        'donate': 'Донат',
+        'followers': 'Подписчики',
+        'subscribers': 'Подписчики',
+        'hobby': 'Хобби',
+        'playlist': 'Плейлист'
+      }
+    };
+    
+    // Language info for flags
+    const languageInfo = {
+      'uz': { flag: 'assets/uz.png', name: 'Uzbekistan' },
+      'us': { flag: 'assets/us.png', name: 'United States' },
+      'ru': { flag: 'assets/ru.png', name: 'Russia' }
+    };
+    
+    let currentLanguage = 'uz'; // Default language
+    
+    // Language selector functions
+    function toggleLanguageDropdown() {
+      const dropdown = document.getElementById('language-dropdown');
+      dropdown.classList.toggle('show');
+    }
+    
+    function selectLanguage(code, flagSrc, countryName) {
+      // Update current flag
+      document.getElementById('current-flag-img').src = flagSrc;
+      document.getElementById('current-flag-img').alt = countryName;
+      
+      // Update current language
+      currentLanguage = code;
+      
+      // Hide dropdown
+      document.getElementById('language-dropdown').classList.remove('show');
+      
+      // Update all text content based on selected language
+      updateLanguageContent(code);
+      
+      console.log('Language changed to:', countryName);
+    }
+    
+    function updateLanguageContent(langCode) {
+      const lang = translations[langCode];
+      
+      // Update all elements with data-translate attribute
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (lang[key]) {
+          if (key === 'followers' || key === 'subscribers') {
+            // Keep the numbers, only translate the labels
+            const currentText = element.textContent;
+            const number = currentText.match(/[\d.]+[KMB]?/)[0]; // Extract number like "70K", "1800", "1M"
+            element.textContent = number + ' ' + lang[key];
+          } else {
+            element.textContent = lang[key];
+          }
+        }
+      });
+    }
+    
+
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const languageSelector = document.querySelector('.language-selector');
+      if (!languageSelector.contains(event.target)) {
+        document.getElementById('language-dropdown').classList.remove('show');
+      }
+    });
+    
+    // Initialize page with Uzbek language
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set Uzbek as default language
+      currentLanguage = 'uz';
+      
+      // Update all text content to Uzbek
+      updateLanguageContent('uz');
+    });
   </script>
 </head>
 <body>
+  <!-- Language Selector -->
+  <div class="language-selector">
+    <div class="current-flag" onclick="toggleLanguageDropdown()">
+      <img src="assets/uz.png" alt="Uzbekistan" id="current-flag-img">
+    </div>
+    <div class="language-dropdown" id="language-dropdown">
+      <div class="flag-option" onclick="selectLanguage('us', 'assets/us.png', 'United States')">
+        <img src="assets/us.png" alt="United States">
+      </div>
+      <div class="flag-option" onclick="selectLanguage('ru', 'assets/ru.png', 'Russia')">
+        <img src="assets/ru.png" alt="Russia">
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <!-- Top Section: Profile Image -->
     <div class="profile-section">
@@ -79,6 +192,18 @@
     </div>
     <!-- Cards Section -->
     <div class="cards-section">
+      <a href="https://tirikchilik.uz/hojixakbar" target="_blank" class="card-link">
+        <div class="card">
+          <div class="card-img">
+            <!-- Handshake SVG -->
+            <svg width="32" height="32" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg>
+          </div>
+          <div class="card-content">
+            <div class="card-title" data-translate="support">Support</div>
+            <div class="card-desc" data-translate="donate">Donate</div>
+          </div>
+        </div>
+      </a>
       <a href="instagram://user?username=hojixkbar" class="card-link" onclick="forceInstagramApp('hojixkbar'); return false;">
         <div class="card">
           <div class="card-img">
@@ -86,7 +211,7 @@
           </div>
           <div class="card-content">
             <div class="card-title">Instagram</div>
-            <div class="card-desc">64K followers</div>
+            <div class="card-desc" data-translate="followers">70K followers</div>
           </div>
         </div>
       </a>
@@ -97,7 +222,7 @@
           </div>
           <div class="card-content">
             <div class="card-title">Telegram</div>
-            <div class="card-desc">1500 subscribers</div>
+            <div class="card-desc" data-translate="subscribers">1800 subscribers</div>
           </div>
         </div>
       </a>
@@ -107,8 +232,19 @@
             <img src="assets/ig.png" alt="Instagram">
           </div>
           <div class="card-content">
-            <div class="card-title">Hobby</div>
-            <div class="card-desc">1M followers</div>
+            <div class="card-title" data-translate="hobby">Hobby</div>
+            <div class="card-desc" data-translate="followers">1M followers</div>
+          </div>
+        </div>
+      </a>
+      <a href="https://open.spotify.com/playlist/3CyGu6TKXImzmakyEWdfJ9?si=FANW38IJR8evg5QSNkuNdQ&pi=AxzdDUkjRgCWh" target="_blank" class="card-link">
+        <div class="card">
+          <div class="card-img">
+            <img src="assets/Spotify.png" alt="Spotify">
+          </div>
+          <div class="card-content">
+            <div class="card-title" data-translate="playlist">Playlist</div>
+            <div class="card-desc">Spotify</div>
           </div>
         </div>
       </a>
