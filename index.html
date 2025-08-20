@@ -71,10 +71,13 @@
       'uz': {
         'support': 'Qo\'llab-quvvatlash',
         'donate': 'Tirikchilik',
-        'followers': 'Obunachilar',
-        'subscribers': 'A\'zo',
+        'followers': 'obunachi',
+        'subscribers': 'a\'zo',
         'hobby': 'Qiziqish',
-        'playlist': 'Pleylist'
+        'playlist': 'Pleylist',
+        'instagram': 'Instagram',
+        'telegram': 'Telegram',
+        'email': 'Email'
       },
       'us': {
         'support': 'Support',
@@ -82,15 +85,21 @@
         'followers': 'followers',
         'subscribers': 'subscribers',
         'hobby': 'Hobby',
-        'playlist': 'Playlist'
+        'playlist': 'Playlist',
+        'instagram': 'Instagram',
+        'telegram': 'Telegram',
+        'email': 'Email'
       },
       'ru': {
         'support': 'Поддержка',
         'donate': 'Донат',
-        'followers': 'Подписчики',
-        'subscribers': 'Подписчики',
+        'followers': 'подписчики',
+        'subscribers': 'подписчики',
         'hobby': 'Хобби',
-        'playlist': 'Плейлист'
+        'playlist': 'Плейлист',
+        'instagram': 'Инстаграм',
+        'telegram': 'Телеграм',
+        'email': 'Эл. почта'
       }
     };
     
@@ -107,6 +116,24 @@
     function toggleLanguageDropdown() {
       const dropdown = document.getElementById('language-dropdown');
       dropdown.classList.toggle('show');
+      updateDropdownContent();
+    }
+    
+    function updateDropdownContent() {
+      const dropdown = document.getElementById('language-dropdown');
+      dropdown.innerHTML = '';
+      Object.keys(languageInfo).forEach(code => {
+        if (code !== currentLanguage) {
+          const flagOption = document.createElement('div');
+          flagOption.className = 'flag-option';
+          flagOption.onclick = () => selectLanguage(code, languageInfo[code].flag, languageInfo[code].name);
+          const flagImg = document.createElement('img');
+          flagImg.src = languageInfo[code].flag;
+          flagImg.alt = languageInfo[code].name;
+          flagOption.appendChild(flagImg);
+          dropdown.appendChild(flagOption);
+        }
+      });
     }
     
     function selectLanguage(code, flagSrc, countryName) {
@@ -210,7 +237,7 @@
             <img src="assets/ig.png" alt="Instagram">
           </div>
           <div class="card-content">
-            <div class="card-title">Instagram</div>
+            <div class="card-title" data-translate="instagram">Instagram</div>
             <div class="card-desc" data-translate="followers">70K followers</div>
           </div>
         </div>
@@ -221,7 +248,7 @@
             <img src="assets/tg.png" alt="Telegram">
           </div>
           <div class="card-content">
-            <div class="card-title">Telegram</div>
+            <div class="card-title" data-translate="telegram">Telegram</div>
             <div class="card-desc" data-translate="subscribers">1800 subscribers</div>
           </div>
         </div>
@@ -255,7 +282,7 @@
             <svg width="32" height="32" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="M22 6l-10 7L2 6"/></svg>
           </div>
           <div class="card-content">
-            <div class="card-title">Email</div>
+            <div class="card-title" data-translate="email">Email</div>
           </div>
         </div>
       </a>
